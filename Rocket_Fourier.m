@@ -6,14 +6,15 @@
 Data = xlsread('Rocket_Data');
 
 % Calculate first 10 coefficients
-Coeffs = zeros(2,11);
-for n = 0:10
+Coeffs = zeros(3,101);
+for n = 0:100
     
     % Treat term 0 differently
     if n == 0
         
         % Take the average of the data as a0
         a = sum(Data(:,1)) / length(Data);
+        ac = a;
         
         % Set b0 as 0
         b = 0;
@@ -24,25 +25,38 @@ for n = 0:10
         time = 850;
         for t = 1:length(Data)
             
-            % Take the integral of the data multiplied by sin(n*pi*x/L)
-            a = a + Data(t,1) * cos(n*pi()*Data(t,2)/50) * (Data(t,2) - time);
-            
             % Take the integral of the data multiplied by cos(n*pi*x/L)
+            a = a + Data(t,1) * cos(n*pi()*Data(t,2)/50) * (Data(t,2) - time);
+            a = a + Data(t,1) * cos(n*pi()*(Data(t,2)-50)/50) * (Data(t,2) - time);
+            
+            % Take the integral of the data multiplied by sin(n*pi*x/L)
             b = b + Data(t,1) * sin(n*pi()*Data(t,2)/50) * (Data(t,2) - time);
+            b = b + Data(t,1) * sin(n*pi()*(Data(t,2)-50)/50) * (Data(t,2) - time);
             
             time = Data(t,2);
             
         end
         
+        time = 850;
+        for t = 1:length(Data)
+            
+            % Take the integral of the data multiplied by cos(n*pi*x/L)
+            ac = ac + Data(t,1) * cos(n*pi()*Data(t,2)/50) * (Data(t,2) - time);
+            
+            time = Data(t,2);
+        end
+        
         % Multiply by 2/L
-        a = a*2/50;
-        b = b*2/50;
+        ac = ac*2/50;
+        a = a/50;
+        b = b/50;
         
     end
     
     % Store coefficient in a matrix
     Coeffs(1, n+1) = a;
     Coeffs(2, n+1) = b;
+    Coeffs(3, n+1) = ac;
     
 end
 
