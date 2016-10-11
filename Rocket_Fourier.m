@@ -5,7 +5,7 @@
 % Load data
 Data = xlsread('Rocket_Data');
 
-% Calculate first 10 coefficients
+% Calculate first 100 coefficients
 Coeffs = zeros(3,101);
 for n = 0:100
     
@@ -25,11 +25,13 @@ for n = 0:100
         time = 850;
         for t = 1:length(Data)
             
-            % Take the integral of the data multiplied by cos(n*pi*x/L)
+            % Take the integral of the data's periodic extension multiplied
+            % by cos(n*pi*x/L) from 800 to 900
             a = a + Data(t,1) * cos(n*pi()*Data(t,2)/50) * (Data(t,2) - time);
             a = a + Data(t,1) * cos(n*pi()*(Data(t,2)-50)/50) * (Data(t,2) - time);
             
-            % Take the integral of the data multiplied by sin(n*pi*x/L)
+            % Take the integral of the data's periodic extension multiplied
+            % by sin(n*pi*x/L) from 800 to 900
             b = b + Data(t,1) * sin(n*pi()*Data(t,2)/50) * (Data(t,2) - time);
             b = b + Data(t,1) * sin(n*pi()*(Data(t,2)-50)/50) * (Data(t,2) - time);
             
@@ -46,31 +48,20 @@ for n = 0:100
             time = Data(t,2);
         end
         
-        % Multiply by 2/L
+        % Multiply by 2/L for the cosine series coefficients and 1/L for
+        % the Fourier series
         ac = ac*2/50;
         a = a/50;
         b = b/50;
         
     end
     
-    % Store coefficient in a matrix
+    % Store coefficients in a matrix
     Coeffs(1, n+1) = a;
     Coeffs(2, n+1) = b;
     Coeffs(3, n+1) = ac;
     
 end
-
-% ys = [];
-% for t = 850:.001:900
-%     y = Coeffs(1,1);
-%     for n = 2:11;
-%         y = y + Coeffs(1,n) * cos(n*pi()*t/50); % + Coeffs(2,n) * sin(n*pi()*t/50);
-%     end
-%     ys = [ys,y];
-% end
-% t = 850:.001:900;
-% 
-% plot(Data(:,2),Data(:,1),t,ys)
 
 % Call simple GUI to select number of terms to plot
 termselector(Data, Coeffs)

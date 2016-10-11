@@ -57,12 +57,12 @@ function cosplotter(hObject, eventdata, Data, Coeffs, terms)
 % Extract number of terms to plot
 num = str2double(get(terms, 'String'));
 
-% Calculate points to fit fourier approximation
+% Calculate points to fit cosine approximation
 ys = [];
 for t = 850:.001:900
     y = Coeffs(3,1);
     for n = 2:num + 1;
-        y = y + Coeffs(3,n) * cos(n*pi()*t/50); % + Coeffs(2,n) * sin(n*pi()*t/50);
+        y = y + Coeffs(3,n) * cos(n*pi()*t/50);
     end
     ys = [ys,y];
 end
