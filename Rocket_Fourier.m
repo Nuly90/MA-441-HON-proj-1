@@ -41,22 +41,22 @@ for n = 0:10
     end
     
     % Store coefficient in a matrix
-    Coeffs(1, n+1) = a
-    Coeffs(2, n+1) = b
+    Coeffs(1, n+1) = a;
+    Coeffs(2, n+1) = b;
     
 end
 
-ys = [];
-for t = 850:.001:900
-    y = Coeffs(1,1);
-    for n = 2:11;
-        y = y + Coeffs(1,n) * cos(n*pi()*t/50) + Coeffs(2,n) * sin(n*pi()*t/50);
-    end
-    ys = [ys,y];
-end
-t = 850:.001:900;
-
-plot(Data(:,2),Data(:,1),t,ys)
+% ys = [];
+% for t = 850:.001:900
+%     y = Coeffs(1,1);
+%     for n = 2:11;
+%         y = y + Coeffs(1,n) * cos(n*pi()*t/50); % + Coeffs(2,n) * sin(n*pi()*t/50);
+%     end
+%     ys = [ys,y];
+% end
+% t = 850:.001:900;
+% 
+% plot(Data(:,2),Data(:,1),t,ys)
 
 % Call simple GUI to select number of terms to plot
-%termselector(Data, Coeffs)
+termselector(Data, Coeffs)
