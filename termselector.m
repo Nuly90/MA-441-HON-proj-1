@@ -48,6 +48,11 @@ set(frame2,'Position', [300,300,400,300]);
 
 % Plot fourier approximation and data
 plot(Data(:,2),Data(:,1),t,ys)
+plottitle = sprintf('Fourier Approximation with %d Terms', num);
+title(plottitle)
+xlabel('Time (Seconds)')
+ylabel('Density of Air (Micro-amps)')
+legend('Data', 'Approximation')
 
 end
 
@@ -75,7 +80,12 @@ set(frame2,'Name','Plot');
 set(frame2,'NumberTitle','off');
 set(frame2,'Position', [300,300,400,300]);
 
-% Plot fourier approximation and data
+% Plot Cosine approximation and data
 plot(Data(:,2),Data(:,1),t,ys)
+plottitle = sprintf('Cosine Approximation with %d Terms', num);
+title(plottitle)
+xlabel('Time (Seconds)')
+ylabel('Density of Air (Micro-amps)')
+legend('Data', 'Approximation')
 
 end
