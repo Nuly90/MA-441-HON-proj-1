@@ -1,0 +1,93 @@
+% Rocket_Fourier_GUI
+function termselectorediting(Data, Coeffs)
+
+% Create frame
+frame = figure('Resize', 'Off');
+set(frame,'MenuBar','none');
+set(frame,'Name','Term Selector');
+set(frame,'NumberTitle','off');
+set(frame,'Position', [100,100,200,260])
+
+% Create edit box to show number of terms
+terms = uicontrol('Style', 'Edit', 'Units', 'Normalized', 'Position', [.4,.5,.2,.1], 'String', '10');
+
+% Create button to plot fourier approximation
+button = uicontrol('Style', 'Pushbutton', 'Units', 'Normalized', 'Position', [.3,.3,.4,.1], 'String', 'Plot Fourier');
+set(button, 'Callback', {@forplotter, Data, Coeffs, terms})
+
+% Create button to plot cosine approximation
+button = uicontrol('Style', 'Pushbutton', 'Units', 'Normalized', 'Position', [.3,.1,.4,.1], 'String', 'Plot Cosine');
+set(button, 'Callback', {@cosplotter, Data, Coeffs, terms})
+
+end
+
+
+% Callback for plot button
+function forplotter(hObject, eventdata, Data, Coeffs, terms)
+
+% Extract number of terms to plot
+num = str2double(get(terms, 'String'));
+
+% Calculate points to fit fourier approximation
+ys = [];
+for t = 850:.001:900
+    y = Coeffs(1,1);
+    for n = 2:num;
+        y = y + Coeffs(1,n) * cos(n*pi()*t/50) + Coeffs(2,n) * sin(n*pi()*t/50);
+    end
+    ys = [ys,y];
+end
+t = 850:.001:900;
+
+% Create a new axes in a new frame
+% frame2 = figure('Resize', 'Off');
+frame2=figure();
+set(frame2,'MenuBar','none');
+set(frame2,'Name','Plot');
+set(frame2,'NumberTitle','off');
+set(frame2,'Position', [300,300,400,300]);
+
+% Plot fourier approximation and data
+plot(Data(:,2),Data(:,1),t,ys,'LineWidth',3)
+plottitle = sprintf('Fourier Approximation with %d Terms', num);
+title(plottitle,'FontWeight','bold','FontSize',48)
+xlabel('Time (Seconds)')
+ylabel('Density of Air (Micro-amps)')
+legend('Data', 'Approximation')
+set(gca,'FontWeight','bold','FontSize',24)
+end
+
+% Callback for cosine plot button
+function cosplotter(hObject, eventdata, Data, Coeffs, terms)
+
+% Extract number of terms to plot
+num = str2double(get(terms, 'String'));
+
+% Calculate points to fit cosine approximation
+ys = [];
+for t = 850:.001:900
+    y = Coeffs(3,1);
+    for n = 2:num;
+        y = y + Coeffs(3,n) * cos(n*pi()*t/50);
+    end
+    ys = [ys,y];
+end
+t = 850:.001:900;
+
+% Create a new axes in a new frame
+% frame2 = figure('Resize', 'Off');
+frame2=figure();
+set(frame2,'MenuBar','none');
+set(frame2,'Name','Plot');
+set(frame2,'NumberTitle','off');
+set(frame2,'Position', [300,300,400,300]);
+
+% Plot Cosine approximation and data
+plot(Data(:,2),Data(:,1),t,ys,'LineWidth',3)
+plottitle = sprintf('Cosine Approximation with %d Terms', num);
+title(plottitle,'FontWeight','bold','FontSize',48)
+xlabel('Time (Seconds)')
+ylabel('Density of Air (Micro-amps)')
+legend('Data', 'Approximation')
+set(gca,'FontWeight','bold','FontSize',24)
+end
